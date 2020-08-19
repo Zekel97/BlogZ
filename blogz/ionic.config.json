@@ -1,0 +1,7 @@
+{
+  "name": "blogz",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
