@@ -2,7 +2,7 @@ const express = require("express");
 
 //const authRoute = require("./routes/authRoute.js");
 
-// const XXXRoute = require("./routes/XXXroute.js");
+const blogRoute = require("./routes/blogRoute.js");
 const cors = require("cors");
 
 const AppError = require('./utils/appError');
@@ -15,7 +15,7 @@ app.use(express.json({ limit: "10kb" }));
 
 app.use("/uploads", express.static("uploads"));
 
-//app.use("/api/v1/reservations", XXXRoute);
+app.use("/api/posts", blogRoute);
 
 
 
