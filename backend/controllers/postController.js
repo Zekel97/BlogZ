@@ -24,3 +24,17 @@ exports.getPost = catchAsync(async (req, res) => {
     },
   });
 });
+
+ exports.createPost = catchAsync(async (req, res) => {
+
+  const body = req.body.body;
+  const title = req.body.title;
+  const post = await postModel.create({ title, body });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      post
+    },
+  });
+});

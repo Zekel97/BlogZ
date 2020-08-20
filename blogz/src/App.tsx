@@ -3,6 +3,7 @@ import Menu from './components/Menu';
 import WhoAmI from './pages/WhoAmI';
 import Blog from './pages/Blog';
 import Contact from './pages/Contact';
+import AdminPage from './pages/AdminPage';
 
 import React from 'react';
 import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
@@ -39,6 +40,8 @@ const App: React.FC = () => {
             <Route path="/page/whoami" component={WhoAmI} exact />
             <Route path="/page/blog" component={Blog} exact />
             <Route path="/page/contact" component={Contact} exact />
+            <Route path="/page/adminpage" component={AdminPage} exact />
+
             <Redirect from="/" to="/page/Blog" exact />
           </IonRouterOutlet>
         </IonSplitPane>

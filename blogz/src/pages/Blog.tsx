@@ -4,14 +4,17 @@ import axios from 'axios';
 
 const Blog: React.FC = () => {
 
-    let post=[];
+  var state = {
+    title : "",
+    body : ""
+  }
 
     useIonViewDidEnter(() => {
         axios.get("http://localhost:3000/api/posts")
-        .then(response => response.data)
-        .then((data) => {
-
-            })
+        .then((res) => {
+          console.log(res.data.data.posts);
+          state = res.data.data.posts;
+        })
       });
 
     
@@ -35,6 +38,7 @@ const Blog: React.FC = () => {
         </IonHeader>
 
         {
+          console.log(state)
                /**
                 *   Prendere i post e mostrarli come Cards.
                 * 
