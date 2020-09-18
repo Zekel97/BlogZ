@@ -46,6 +46,12 @@ const appPages: AppPage[] = [
     url: '/page/adminpage',
     iosIcon: paperPlaneOutline,
     mdIcon: paperPlaneSharp
+  },
+  {
+    title: 'Login',
+    url: '/page/login',
+    iosIcon: paperPlaneOutline,
+    mdIcon: paperPlaneSharp
   }
 ];
 

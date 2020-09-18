@@ -2,34 +2,35 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 import React from 'react';
 import axios from 'axios';
 
-const AdminPage: React.FC = () => {
+const Login: React.FC = () => {
 
-  let nomePost:any, corpoPost:any;
+  let username:any, password:any;
   let urlDB = 'http://localhost:3000/api/';
 
-  function handleNomePost(event: any) 
-{
-  nomePost=event;
-}
-function handleCorpoPost(event: any) 
-{
-  corpoPost=event;
-}
-
-  function inviaPost()
+  function handleUsername(event: any) 
   {
-    console.log("nome: "+nomePost+", corpo: "+corpoPost);
+    username=event;
+  }
+  function handlePassword(event: any) 
+  {
+    password=event;
+  }
+
+  function loginsend()
+  {
+    console.log("nome: "+username+", corpo: "+password+" verso "+urlDB+"login");
     axios({
       method: 'post',
-      url: urlDB+'posts',
+      url: urlDB+'login',
       data: {
-        title: nomePost,
-        body: corpoPost
+        usr: username,
+        psw: password
       }
     });
+
     console.log('inviata!');
   
-    doRefresh();
+    //doRefresh();
   }
   
   function doRefresh()
@@ -60,7 +61,7 @@ function handleCorpoPost(event: any)
           
           <IonCard>
             <IonCardHeader>
-              <IonCardTitle>Crea Nuovo Post</IonCardTitle>
+              <IonCardTitle>Login</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
   
@@ -71,22 +72,23 @@ function handleCorpoPost(event: any)
             
             
               <IonInput 
-                    placeholder="Nome Post" 
+                    placeholder="Username" 
                     type="text" 
-                    value={nomePost}
-                    onIonChange={(e) => handleNomePost((e.target as HTMLInputElement).value)}
+                    value={username}
+                    onIonChange={(e) => handleUsername((e.target as HTMLInputElement).value)}
                     id="inputNomeNota"
                     required >
               </IonInput>
       
-              <IonTextarea 
-                  placeholder="Corpo Post"
-                  value={corpoPost} 
-                  onIonChange={e => handleCorpoPost(e.detail.value!)} 
-                  auto-grow={true} >
-              </IonTextarea>
+              <IonInput 
+                  placeholder="Password"
+                  type="password"
+                  value={password} 
+                  onIonChange={e => handlePassword(e.detail.value!)} 
+              >
+              </IonInput>
   
-              <IonButton onClick={inviaPost}>INVIA</IonButton>
+              <IonButton onClick={loginsend}>INVIA</IonButton>
   
             </IonCardContent>
           </IonCard>
@@ -98,4 +100,4 @@ function handleCorpoPost(event: any)
   );
 };
 
-export default AdminPage;
+export default Login;
