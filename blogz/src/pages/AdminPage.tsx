@@ -57,7 +57,7 @@ function handleCorpoPost(event: any)
         </IonHeader>
 
         <IonContent>
-          
+          {/* QUESTO PURE E' SOLO UN PEZZO DA QUA */}
           <IonCard>
             <IonCardHeader>
               <IonCardTitle>Crea Nuovo Post</IonCardTitle>
@@ -90,7 +90,7 @@ function handleCorpoPost(event: any)
   
             </IonCardContent>
           </IonCard>
-  
+          {/* A QUA */}
           
         </IonContent>
       </IonContent>

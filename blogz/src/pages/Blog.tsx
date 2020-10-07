@@ -1,24 +1,23 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
-import React from 'react';
+import { IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import React, { Component } from 'react';
 import axios from 'axios';
 
-const Blog: React.FC = () => {
+class Blog extends Component {
 
-  var state = {
-    title : "",
-    body : ""
+  public state = {
+    posts: []
   }
 
-    useIonViewDidEnter(() => {
-        axios.get("http://localhost:3000/api/posts")
-        .then((res) => {
-          console.log(res.data.data.posts);
-          state = res.data.data.posts;
-        })
-      });
+componentDidMount() {
+  console.log("hey");
+  axios.get("http://localhost:3000/api/posts")
+  .then((res) => {
+    console.log(res.data.data.posts);
+    this.setState({posts: res.data.data.posts});
+  });
 
-    
-
+}
+render(){
   return (
     <IonPage>
       <IonHeader>
@@ -37,17 +36,28 @@ const Blog: React.FC = () => {
           </IonToolbar>
         </IonHeader>
 
-        {
-          console.log(state)
-               /**
-                *   Prendere i post e mostrarli come Cards.
-                * 
-                 */ 
+        {this.state.posts.reverse().map((item) => (
+                <IonCard>
 
-        }
+                <IonCardHeader>
+
+                <IonCardTitle>
+                {item.title}
+
+                </IonCardTitle>
+
+                </IonCardHeader>
+                <IonCardContent>
+                  <p>{item.body}</p>
+                </IonCardContent>
+                </IonCard>
+
+      ))}
+
       </IonContent>
     </IonPage>
   );
+      }
 };
 
 export default Blog;
