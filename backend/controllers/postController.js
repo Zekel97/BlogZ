@@ -4,7 +4,7 @@ const postModel = require('./../models/blogModel');
 
 exports.getAllPosts = catchAsync(async (req, res) => {
   const posts = await postModel.find();
-  console.log(posts);
+
   res.status(200).json({
     status: "success",
     data: {

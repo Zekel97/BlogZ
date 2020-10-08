@@ -1,23 +1,28 @@
 const catchAsync = require("../utils/catchAsync");
 const AppError = require('../utils/appError');
-const loginsModel = require('../models/loginsModel');
 
 
  exports.login = catchAsync(async (req, res) => {
 
   const usr = req.body.usr;
   const psw = req.body.psw;
-  console.log(usr+" --- "+psw)
-  const login = await loginsModel.find({usr});
-  const val="ok";
-  if("password" == psw)
+  let val;
+
+  //TODO collegarlo al DB
+  if("password" == psw && "BigZ" == usr)
   {
+    val="ok";
     res.status(200).json({
-      status: "success"
+      status: "success",
+      data: val
     });
   }
-
-  res.status(401).json({
-    status: "nokie"
-  });
+  else
+  {
+    val="no";
+    res.status(200).json({
+      status: "nokie",
+      data: val
+    });
+  }
 });

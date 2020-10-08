@@ -1,139 +1,159 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, useIonViewDidEnter, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonRefresher, IonRefresherContent, IonInput, IonTextarea, IonButton } from '@ionic/react';
-import React from 'react';
+import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonRefresher, IonRefresherContent, IonInput, IonTextarea, IonButton } from '@ionic/react';
+import React, { Component } from 'react';
 import axios from 'axios';
 
-const Login: React.FC = () => {
+class Login extends Component {
 
-  let username:any, password:any;
-  let urlDB = 'http://localhost:3000/api/posts/';
-
-  let loginDone = false;
-
-  function handleUsername(event: any) 
-  {
-    username=event;
+  public state = {
+    username: "",
+    password: "",
+    urlDB: "http://localhost:3000/api/posts/",
+    loginDone: false,
+    nomePost: "",
+    corpoPost: "",
+    errorLogin: false,
+    postSent: false
   }
-  function handlePassword(event: any) 
+  
+  doRefresh()
   {
-    password=event;
+    window.location.reload();
   }
-
-  function loginsend()
-  {
-    axios.post(urlDB+'login',
+  loginSend = () => { 
+    axios.post(this.state.urlDB+'login',
     {
-      usr: username,
-      psw: password
+      usr: this.state.username,
+      psw: this.state.password
     }).then((res) => {
-      console.log(res.data.status);
-      if(res.data.status == "success")
+      if(res.data.data === "ok")
       {
-        console.log("YIPPIE")
-        loginDone = true;
+        this.setState({loginDone:true});
+        this.setState({errorLogin: false});
+      }
+      else
+      {
+        this.setState({errorLogin: true})
       }
     })
     
   }
-  
-  function doRefresh()
+  postSend = () =>
   {
-    window.location.reload();
+
+    axios.post(this.state.urlDB,
+    {
+      title: this.state.nomePost,
+      body: this.state.corpoPost
+    }).then((res) => {
+      if(res.data.status === "success")
+      {
+        this.setState({postSent: true});
+      }
+    })
   }
-    
-
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <IonTitle>Admin</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
-      <IonContent>
-        <IonHeader collapse="condense">
+  render(){
+    return (
+      <IonPage>
+        <IonHeader>
           <IonToolbar>
-            <IonTitle size="large">Admin</IonTitle>
+            <IonButtons slot="start">
+              <IonMenuButton />
+            </IonButtons>
+            <IonTitle>Admin</IonTitle>
           </IonToolbar>
         </IonHeader>
-
         <IonContent>
-          
-          {!loginDone &&
-          <IonCard>
-            <IonCardHeader>
-              <IonCardTitle>Login</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-            <IonRefresher slot="fixed" onIonRefresh={doRefresh}>
-              <IonRefresherContent></IonRefresherContent>
-            </IonRefresher>
-            
-              <IonInput 
-                    placeholder="Username" 
-                    type="text" 
-                    value={username}
-                    onIonChange={(e) => handleUsername((e.target as HTMLInputElement).value)}
-                    id="inputNomeNota"
-                    required >
-              </IonInput>
-      
-              <IonInput 
-                  placeholder="Password"
-                  type="password"
-                  value={password} 
-                  onIonChange={e => handlePassword(e.detail.value!)} 
-              >
-              </IonInput>
-  
-              <IonButton onClick={loginsend}>INVIA</IonButton>
-  
-            </IonCardContent>
-          </IonCard>
-          }
+          <IonHeader collapse="condense">
+            <IonToolbar>
+              <IonTitle size="large">Admin</IonTitle>
+            </IonToolbar>
+          </IonHeader>
 
-          {loginDone && 
-                    <IonCard>
-                    <IonCardHeader>
-                      <IonCardTitle>Crea Nuovo Post</IonCardTitle>
-                    </IonCardHeader>
-                    <IonCardContent>
-          
-                    <IonRefresher slot="fixed" onIonRefresh={doRefresh}>
-                      <IonRefresherContent></IonRefresherContent>
-                    </IonRefresher>
-          
-                    
-                    
-                      <IonInput 
-                            placeholder="Nome Post" 
-                            type="text" 
-                            value={nomePost}
-                            onIonChange={(e) => handleNomePost((e.target as HTMLInputElement).value)}
-                            id="inputNomeNota"
-                            required >
-                      </IonInput>
+          <IonContent>
+            
+            {!this.state.loginDone &&
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle>Login</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+              <IonRefresher slot="fixed" onIonRefresh={this.doRefresh}>
+                <IonRefresherContent></IonRefresherContent>
+              </IonRefresher>
               
-                      <IonTextarea 
-                          placeholder="Corpo Post"
-                          value={corpoPost} 
-                          onIonChange={e => handleCorpoPost(e.detail.value!)} 
-                          auto-grow={true} >
-                      </IonTextarea>
-          
-                      <IonButton onClick={inviaPost}>INVIA</IonButton>
-          
-                    </IonCardContent>
-                  </IonCard>
-          
-          }
-          
+                <IonInput 
+                      placeholder="Username" 
+                      type="text" 
+                      onIonChange={(e) => this.setState({username: e.detail.value})}
+                      required >
+                </IonInput>
+        
+                <IonInput 
+                    placeholder="Password"
+                    type="password"
+                    onIonChange={e => this.setState({password: e.detail.value})} 
+                >
+                </IonInput>
+    
+                <IonButton onClick={this.loginSend}>INVIA</IonButton>
+
+              </IonCardContent>
+              {this.state.errorLogin && 
+                <IonCard>
+                  <IonCardContent color="red">
+                    <h2 ><b>Error Login</b></h2>
+                  </IonCardContent>
+                </IonCard>
+              }
+            </IonCard>
+            }
+
+            {this.state.loginDone && 
+                      <IonCard>
+                      <IonCardHeader>
+                        <IonCardTitle>Crea Nuovo Post</IonCardTitle>
+                      </IonCardHeader>
+                      <IonCardContent>
+            
+                      <IonRefresher slot="fixed" onIonRefresh={this.doRefresh}>
+                        <IonRefresherContent></IonRefresherContent>
+                      </IonRefresher>
+            
+                      
+                      
+                        <IonTextarea
+                              placeholder="Nome Post"
+                              onIonChange={(e) => this.setState({nomePost: e.detail.value})}
+                              required
+                              auto-grow={true} >
+                        </IonTextarea>
+                
+                        <IonTextarea
+                            placeholder="Corpo Post"
+                            onIonChange={(e) => this.setState({corpoPost: e.detail.value})}
+                            required
+                            auto-grow={true} >
+                        </IonTextarea>
+            
+                        <IonButton onClick={this.postSend}>INVIA</IonButton>
+            
+                      </IonCardContent>
+                      {this.state.postSent && 
+                        <IonCard>
+                          <IonCardContent color="green">
+                            <h2 ><b>Post Inviato!</b></h2>
+                          </IonCardContent>
+                        </IonCard>
+                      }
+                    </IonCard>
+            
+            }
+            
+          </IonContent>
         </IonContent>
-      </IonContent>
-    </IonPage>
-  );
+      </IonPage>
+    );
+  }
 };
 
 export default Login;
