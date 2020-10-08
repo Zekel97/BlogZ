@@ -1,53 +1,70 @@
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
-import React from 'react';
+import { IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonMenuButton, IonPage, IonRefresher, IonRefresherContent, IonTitle, IonToolbar,withIonLifeCycle  } from '@ionic/react';
+import React, { Component } from 'react';
 import axios from 'axios';
 
-const Blog: React.FC = () => {
+class Blog extends Component {
 
-  var state = {
-    title : "",
-    body : ""
+  public state = {
+    posts: []
   }
 
-    useIonViewDidEnter(() => {
-        axios.get("http://localhost:3000/api/posts")
-        .then((res) => {
-          console.log(res.data.data.posts);
-          state = res.data.data.posts;
-        })
-      });
+  ionViewDidEnter() {
+    axios.get("http://localhost:3000/api/posts")
+    .then((res) => {
+      this.setState({posts: res.data.data.posts});
+    });
+  }
 
-    
-
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonMenuButton />
-          </IonButtons>
-          <IonTitle>Blog</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
-      <IonContent>
-        <IonHeader collapse="condense">
+  doRefresh()
+  {
+    window.location.reload();
+  }
+  render(){
+    return (
+      <IonPage>
+        <IonHeader>
           <IonToolbar>
-            <IonTitle size="large">Blog</IonTitle>
+            <IonButtons slot="start">
+              <IonMenuButton />
+            </IonButtons>
+            <IonTitle>Blog</IonTitle>
           </IonToolbar>
         </IonHeader>
 
-        {
-          console.log(state)
-               /**
-                *   Prendere i post e mostrarli come Cards.
-                * 
-                 */ 
+        <IonContent>
 
-        }
-      </IonContent>
-    </IonPage>
-  );
+          <IonRefresher slot="fixed" onIonRefresh={this.doRefresh}>
+            <IonRefresherContent></IonRefresherContent>
+          </IonRefresher>
+
+          <IonHeader collapse="condense">
+            <IonToolbar>
+              <IonTitle size="large">Blog</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+
+          {this.state.posts.reverse().map((item:any,index) => (
+
+            <IonCard key={index}>
+
+              <IonCardHeader>
+                <IonCardTitle>
+                  <h1>{item.title}</h1>
+                </IonCardTitle>
+              </IonCardHeader>
+
+              <IonCardContent>
+                <p>{item.body}</p>
+              </IonCardContent>
+            
+            </IonCard>
+
+        ))}
+
+        </IonContent>
+      </IonPage>
+    );
+  }
 };
 
-export default Blog;
+export default withIonLifeCycle(Blog);
